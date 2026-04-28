@@ -1,0 +1,43 @@
+body {
+  background: #f5f7fa;
+  color: #20232a;
+}
+
+.navbar-brand {
+  font-weight: 700;
+}
+
+.card-title {
+  margin-bottom: 0.5rem;
+}
+
+.badge-urgency-critical {
+  background: #dc3545;
+}
+
+.badge-urgency-high {
+  background: #fd7e14;
+}
+
+.badge-urgency-normal {
+  background: #28a745;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.page-section {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+footer {
+  margin-top: 2rem;
+  text-align: center;
+  color: #6c757d;
+}

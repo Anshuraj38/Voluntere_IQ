@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VolunteerIQ Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  {% if google_api_key %}
+  <!-- Google Maps -->
+  <script src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&callback=initMap" async defer></script>
+  <script>
+  function initMap() {
+      const map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 10,
+          center: { lat: 23.3441, lng: 85.3096 }  // Ranchi coordinates
+      });
+  }
+  </script>
+  {% else %}
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+      const mapEl = document.getElementById('map');
+      if (mapEl) {
+          mapEl.innerHTML = '<div class="text-center text-muted pt-5">Google Maps key not configured. Add GOOGLE_API_KEY to .env.</div>';
+      }
+  });
+  </script>
+  {% endif %}
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand" href="/">VolunteerIQ</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="/submit">Submit Need</a></li>
+            <li class="nav-item"><a class="nav-link" href="/register">Register Volunteer</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container page-section" id="dashboardRoot">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 class="h3">VolunteerIQ Dashboard</h1>
+          <p class="text-muted">Monitor community needs, volunteer capacity, and match outcomes.</p>
+        </div>
+        <button class="btn btn-outline-secondary" onclick="loadDashboard()">Refresh</button>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-sm-6 col-xl-3">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Total Needs</h5>
+              <p class="fs-1" id="totalNeeds">0</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Resolved</h5>
+              <p class="fs-1 text-success" id="resolvedNeeds">0</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Pending</h5>
+              <p class="fs-1 text-warning" id="pendingNeeds">0</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Active Volunteers</h5>
+              <p class="fs-1 text-info" id="activeVolunteers">0</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Need Heatmap</h5>
+              <div id="map" style="height: 400px; width: 100%; border-radius: 10px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row gy-4">
+        <div class="col-lg-8">
+          <div class="card shadow-sm">
+            <div class="card-header">
+              <h5 class="mb-0">Community Needs</h5>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>Location</th>
+                    <th>Urgency</th>
+                    <th>Affected</th>
+                    <th>Skills</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                  </tr>
+                </thead>
+                <tbody id="needsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card shadow-sm">
+            <div class="card-header">
+              <h5 class="mb-0">Volunteer Roster</h5>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Skills</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="volunteersTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="container py-4">
+      <p class="mb-0 text-muted">VolunteerIQ · AI-powered volunteer coordination for NGOs.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </body>
+</html>
